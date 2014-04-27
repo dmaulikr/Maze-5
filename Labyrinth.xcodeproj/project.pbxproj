@@ -21,6 +21,8 @@
 		27AC1829190C859700A89C57 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27AC180B190C859700A89C57 /* UIKit.framework */; };
 		27AC1831190C859700A89C57 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 27AC182F190C859700A89C57 /* InfoPlist.strings */; };
 		27AC1833190C859700A89C57 /* LabyrinthTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AC1832190C859700A89C57 /* LabyrinthTests.m */; };
+		27AC183E190C85AB00A89C57 /* BallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AC183D190C85AB00A89C57 /* BallView.m */; };
+		27AC1840190C874600A89C57 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27AC183F190C874600A89C57 /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,9 @@
 		27AC182E190C859700A89C57 /* LabyrinthTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LabyrinthTests-Info.plist"; sourceTree = "<group>"; };
 		27AC1830190C859700A89C57 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		27AC1832190C859700A89C57 /* LabyrinthTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LabyrinthTests.m; sourceTree = "<group>"; };
+		27AC183C190C85AB00A89C57 /* BallView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BallView.h; sourceTree = "<group>"; };
+		27AC183D190C85AB00A89C57 /* BallView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BallView.m; sourceTree = "<group>"; };
+		27AC183F190C874600A89C57 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27AC1840190C874600A89C57 /* CoreMotion.framework in Frameworks */,
 				27AC180A190C859700A89C57 /* CoreGraphics.framework in Frameworks */,
 				27AC180C190C859700A89C57 /* UIKit.framework in Frameworks */,
 				27AC1808190C859700A89C57 /* Foundation.framework in Frameworks */,
@@ -101,6 +107,7 @@
 		27AC1806190C859700A89C57 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				27AC183F190C874600A89C57 /* CoreMotion.framework */,
 				27AC1807190C859700A89C57 /* Foundation.framework */,
 				27AC1809190C859700A89C57 /* CoreGraphics.framework */,
 				27AC180B190C859700A89C57 /* UIKit.framework */,
@@ -117,6 +124,8 @@
 				27AC1819190C859700A89C57 /* Main.storyboard */,
 				27AC181C190C859700A89C57 /* ViewController.h */,
 				27AC181D190C859700A89C57 /* ViewController.m */,
+				27AC183C190C85AB00A89C57 /* BallView.h */,
+				27AC183D190C85AB00A89C57 /* BallView.m */,
 				27AC181F190C859700A89C57 /* Images.xcassets */,
 				27AC180E190C859700A89C57 /* Supporting Files */,
 			);
@@ -252,6 +261,7 @@
 				27AC181E190C859700A89C57 /* ViewController.m in Sources */,
 				27AC1818190C859700A89C57 /* AppDelegate.m in Sources */,
 				27AC1814190C859700A89C57 /* main.m in Sources */,
+				27AC183E190C85AB00A89C57 /* BallView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
