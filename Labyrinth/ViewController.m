@@ -14,9 +14,6 @@
 @interface ViewController ()
 
 @property (nonatomic, strong) CMMotionManager *motion;
-@property (weak, nonatomic) IBOutlet UILabel *xLabel;
-@property (weak, nonatomic) IBOutlet UILabel *yLabel;
-@property (weak, nonatomic) IBOutlet UILabel *zLabel;
 @property (nonatomic, strong) BallView *ball;
 @property (nonatomic) CGFloat xSpeed;
 @property (nonatomic) CGFloat ySpeed;
@@ -40,6 +37,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.walls = [@[] mutableCopy];    
+//    [self.walls addObjectsFromArray:self.view.subviews];
+    NSLog(@"Walls count: %i", self.walls.count);
+    
     self.lastUpdate = [NSDate date];
     self.currentPoint = self.view.center;
     
@@ -56,7 +57,7 @@
     [self.view addSubview:self.ball];
     
     // Create wall...
-    self.walls = [@[] mutableCopy];
+
     CGRect wallFrame = CGRectMake(10, 10, 100, 20);
     UIView *wallView = [[UIView alloc] initWithFrame:wallFrame];
     wallView.backgroundColor = [UIColor blueColor];
@@ -159,14 +160,13 @@
     CGRect frame = self.ball.frame;
     frame.origin.x = self.currentPoint.x;
     frame.origin.y = self.currentPoint.y;
-    
+
+    CGPoint ballCenter = CGPointMake(frame.origin.x + (frame.size.width / 2),
+                                     frame.origin.y + (frame.size.height / 2));
     for (UIView *wall in self.walls) {
-        
-        if (CGRectIntersectsRect(frame, wall.frame)) {
             
             // Compute collision angle
-            CGPoint ballCenter = CGPointMake(frame.origin.x + (frame.size.width / 2),
-                                             frame.origin.y + (frame.size.height / 2));
+
             CGPoint wallCenter  = CGPointMake(wall.frame.origin.x + (wall.frame.size.width / 2),
                                               wall.frame.origin.y + (wall.frame.size.height / 2));
             
@@ -180,8 +180,6 @@
                 _currentPoint.y = self.previousPoint.y;
                 self.yVelocity = -(self.yVelocity / 2.0);
             }
-            
-        }
         
     }
     
