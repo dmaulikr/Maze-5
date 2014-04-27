@@ -37,6 +37,7 @@
 {
     [super viewDidLoad];
     self.lastUpdate = [NSDate date];
+    self.currentPoint = self.view.center;
     
     // Create ball view
     CGSize ballSize = CGSizeMake(30, 30);
@@ -45,10 +46,10 @@
     [self.view addSubview:self.ball];
     
     // Create wall...
-    CGRect wallFrame = CGRectMake(10, 10, 100, 20);
-    UIView *wallView = [[UIView alloc] initWithFrame:wallFrame];
-    wallView.backgroundColor = [UIColor blueColor];
-    [self.view addSubview:wallView];
+//    CGRect wallFrame = CGRectMake(10, 10, 100, 20);
+//    UIView *wallView = [[UIView alloc] initWithFrame:wallFrame];
+//    wallView.backgroundColor = [UIColor blueColor];
+//    [self.view addSubview:wallView];
     
     // Initiate accelerometer
     self.motion = [[CMMotionManager alloc] init];
@@ -57,6 +58,8 @@
         [self handleAcceleration:accelerometerData];
     }];
 }
+
+#define kScalingFactor 2000
 
 - (void)handleAcceleration:(CMAccelerometerData *)data
 {
@@ -73,10 +76,11 @@
     self.xVelocity = self.xVelocity - (x * timeSinceLastDraw);
     self.yVelocity = self.yVelocity - (y * timeSinceLastDraw);
     
-    CGFloat dx = timeSinceLastDraw * self.xVelocity;
-    CGFloat dy = timeSinceLastDraw * self.yVelocity;
+    CGFloat dx = timeSinceLastDraw * self.xVelocity * kScalingFactor;
+    CGFloat dy = timeSinceLastDraw * self.yVelocity * kScalingFactor;
     
-    self.currentPoint = CGPointMake(self.currentPoint.x + dx, self.currentPoint.y + dy);
+    self.currentPoint = CGPointMake(self.currentPoint.x - dx,
+                                    self.currentPoint.y + dy);
     
     [self moveBall];
     
@@ -86,15 +90,6 @@
 - (void)moveBall
 {
     self.previousPoint = self.currentPoint;
-    
-//        [self bounceOffWalls];
-    
-//    self.ball.frame = CGRectMake(self.ball.frame.origin.x + self.xSpeed, self.ball.frame.origin.y - self.ySpeed, self.ball.frame.size.width, self.ball.frame.size.height);
-    
-
-    
-//    self.xSpeed /= 1.1;
-//    self.ySpeed /= 1.1;
     
     CGRect frame = self.ball.frame;
     frame.origin = self.currentPoint;
