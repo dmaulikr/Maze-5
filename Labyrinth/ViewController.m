@@ -32,6 +32,7 @@
 @implementation ViewController
 
 #define kUpdateInterval 1.0f/60.0f
+#define kBallSize 30
 
 - (void)viewDidLoad
 {
@@ -40,9 +41,9 @@
     self.currentPoint = self.view.center;
     
     // Create ball view
-    CGSize ballSize = CGSizeMake(30, 30);
-    CGRect frame = CGRectMake(self.view.center.x - ballSize.width/2, self.view.center.y - ballSize.height/2, ballSize.width, ballSize.height);
-    self.ball = [[BallView alloc] initWithFrame:frame];
+    CGRect ballFrame = CGRectMake(0, 0, kBallSize, kBallSize);
+    ballFrame.origin = self.currentPoint;
+    self.ball = [[BallView alloc] initWithFrame:ballFrame];
     [self.view addSubview:self.ball];
     
     // Create wall...
@@ -60,6 +61,7 @@
 }
 
 #define kScalingFactor 2000
+#define kFriction 1.05
 
 - (void)handleAcceleration:(CMAccelerometerData *)data
 {
@@ -73,8 +75,8 @@
 //    self.yLabel.text = [NSString stringWithFormat:@"y: %.2f", y];
 //    self.zLabel.text = [NSString stringWithFormat:@"z: %.2f", z];
     
-    self.xVelocity = self.xVelocity - (x * timeSinceLastDraw);
-    self.yVelocity = self.yVelocity - (y * timeSinceLastDraw);
+    self.xVelocity = (self.xVelocity / kFriction) - (x * timeSinceLastDraw);
+    self.yVelocity = (self.yVelocity / kFriction) - (y * timeSinceLastDraw);
     
     CGFloat dx = timeSinceLastDraw * self.xVelocity * kScalingFactor;
     CGFloat dy = timeSinceLastDraw * self.yVelocity * kScalingFactor;
@@ -89,6 +91,7 @@
 
 - (void)moveBall
 {
+    [self collisionWithBoundaries];
     self.previousPoint = self.currentPoint;
     
     CGRect frame = self.ball.frame;
@@ -97,25 +100,30 @@
 
 }
 
-- (void)bounceOffWalls
-{
-    if (self.ball.frame.origin.x <= 0) {
-        self.xSpeed = fabs(self.xSpeed/1.1);
-    } else if (self.ball.frame.origin.x >= self.view.bounds.size.width - self.ball.frame.size.width) {
-        self.xSpeed = -fabs(self.xSpeed/1.1);
+#define kReflectionFactor 2
+
+- (void)collisionWithBoundaries {
+    
+    if (self.currentPoint.x < 0) {
+        self.currentPoint = CGPointMake(0, self.currentPoint.y);
+        self.xVelocity = -(self.xVelocity / kReflectionFactor);
     }
     
-    if (self.ball.frame.origin.y <= 0) {
-        self.ySpeed = -fabs(self.ySpeed/1.1);
-    } else if (self.ball.frame.origin.y >= self.view.bounds.size.height - self.ball.frame.size.height) {
-        self.ySpeed = fabs(self.ySpeed/1.1);
+    if (self.currentPoint.y < 0) {
+        self.currentPoint = CGPointMake(self.currentPoint.x, 0);
+        self.yVelocity = -(self.yVelocity / kReflectionFactor);
     }
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    if (self.currentPoint.x > self.view.bounds.size.width - self.ball.frame.size.width) {
+        _currentPoint.x = self.view.bounds.size.width - self.ball.frame.size.width;
+        self.xVelocity = -(self.xVelocity / kReflectionFactor);
+    }
+    
+    if (self.currentPoint.y > self.view.bounds.size.height - self.ball.frame.size.height) {
+        _currentPoint.y = self.view.bounds.size.height - self.ball.frame.size.height;
+        self.yVelocity = -(self.yVelocity / kReflectionFactor);
+    }
+    
 }
 
 @end
