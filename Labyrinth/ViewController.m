@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *yLabel;
 @property (weak, nonatomic) IBOutlet UILabel *zLabel;
 @property (nonatomic, strong) BallView *ball;
+@property (nonatomic) CGFloat xSpeed;
+@property (nonatomic) CGFloat ySpeed;
 
 @end
 
@@ -54,7 +56,14 @@
 
 - (void)moveBallX:(CGFloat)dx andY:(CGFloat)dy
 {
-    self.ball.frame = CGRectMake(self.ball.frame.origin.x + 10 * dx, self.ball.frame.origin.y - 10 * dy, self.ball.frame.size.width, self.ball.frame.size.height);
+    self.xSpeed += 2 * dx;
+    self.ySpeed += 2 * dy;
+    
+    self.ball.frame = CGRectMake(self.ball.frame.origin.x + self.xSpeed, self.ball.frame.origin.y - self.ySpeed, self.ball.frame.size.width, self.ball.frame.size.height);
+    
+    self.xSpeed /= 1.1;
+    self.ySpeed /= 1.1;
+
 }
 
 - (void)didReceiveMemoryWarning
