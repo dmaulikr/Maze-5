@@ -10,4 +10,7 @@
 
 @interface BallView : UIView
 
+
+- (id)initWithFrame:(CGRect)frame withColor:(UIColor *)color;
+
 @end

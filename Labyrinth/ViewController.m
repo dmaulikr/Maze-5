@@ -27,6 +27,9 @@
 @property (nonatomic) CGFloat xVelocity;
 @property (nonatomic) CGFloat yVelocity;
 
+@property (nonatomic, strong) BallView *exit;
+@property (nonatomic, strong) NSMutableArray *walls;
+
 @end
 
 @implementation ViewController
@@ -40,17 +43,26 @@
     self.lastUpdate = [NSDate date];
     self.currentPoint = self.view.center;
     
-    // Create ball view
+    // Make exit
     CGRect ballFrame = CGRectMake(0, 0, kBallSize, kBallSize);
+    ballFrame.origin = CGPointMake(self.view.bounds.size.width * 0.9, self.view.bounds.size.height * 0.9);
+    self.exit = [[BallView alloc] initWithFrame:ballFrame withColor:[UIColor blackColor]];
+    [self.view addSubview:self.exit];
+    
+    // Create ball view
+
     ballFrame.origin = self.currentPoint;
-    self.ball = [[BallView alloc] initWithFrame:ballFrame];
+    self.ball = [[BallView alloc] initWithFrame:ballFrame withColor:[UIColor redColor]];
     [self.view addSubview:self.ball];
     
     // Create wall...
-//    CGRect wallFrame = CGRectMake(10, 10, 100, 20);
-//    UIView *wallView = [[UIView alloc] initWithFrame:wallFrame];
-//    wallView.backgroundColor = [UIColor blueColor];
-//    [self.view addSubview:wallView];
+    self.walls = [@[] mutableCopy];
+    CGRect wallFrame = CGRectMake(10, 10, 100, 20);
+    UIView *wallView = [[UIView alloc] initWithFrame:wallFrame];
+    wallView.backgroundColor = [UIColor blueColor];
+    [self.walls addObject:wallView];
+    [self.view addSubview:wallView];
+    
     
     // Initiate accelerometer
     self.motion = [[CMMotionManager alloc] init];
@@ -69,7 +81,7 @@
     
     CGFloat x = data.acceleration.x;
     CGFloat y = data.acceleration.y;
-    CGFloat z = data.acceleration.z;
+//    CGFloat z = data.acceleration.z;
     
 //    self.xLabel.text = [NSString stringWithFormat:@"x: %.2f", x];
 //    self.yLabel.text = [NSString stringWithFormat:@"y: %.2f", y];
@@ -91,7 +103,9 @@
 
 - (void)moveBall
 {
+    [self collisionWithExit];
     [self collisionWithBoundaries];
+    [self collsionWithWalls];
     self.previousPoint = self.currentPoint;
     
     CGRect frame = self.ball.frame;
@@ -122,6 +136,53 @@
     if (self.currentPoint.y > self.view.bounds.size.height - self.ball.frame.size.height) {
         _currentPoint.y = self.view.bounds.size.height - self.ball.frame.size.height;
         self.yVelocity = -(self.yVelocity / kReflectionFactor);
+    }
+    
+}
+
+- (void)collisionWithExit {
+    CGFloat xDist = self.exit.frame.origin.x - self.ball.frame.origin.x;
+    CGFloat yDist = self.exit.frame.origin.y - self.ball.frame.origin.y;
+    CGFloat distance = abs(sqrtf((xDist * xDist) + (yDist * yDist)));
+    
+//    NSLog(@"Distance: %f", distance);
+    
+    if (distance <= 10) {
+        [self.motion stopAccelerometerUpdates];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You've won!" message:nil delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+- (void)collsionWithWalls {
+    
+    CGRect frame = self.ball.frame;
+    frame.origin.x = self.currentPoint.x;
+    frame.origin.y = self.currentPoint.y;
+    
+    for (UIView *wall in self.walls) {
+        
+        if (CGRectIntersectsRect(frame, wall.frame)) {
+            
+            // Compute collision angle
+            CGPoint ballCenter = CGPointMake(frame.origin.x + (frame.size.width / 2),
+                                             frame.origin.y + (frame.size.height / 2));
+            CGPoint wallCenter  = CGPointMake(wall.frame.origin.x + (wall.frame.size.width / 2),
+                                              wall.frame.origin.y + (wall.frame.size.height / 2));
+            
+            CGFloat angleX = ballCenter.x - wallCenter.x;
+            CGFloat angleY = ballCenter.y - wallCenter.y;
+            
+            if (abs(angleX) > abs(angleY)) {
+                _currentPoint.x = self.previousPoint.x;
+                self.xVelocity = -(self.xVelocity / 2.0);
+            } else {
+                _currentPoint.y = self.previousPoint.y;
+                self.yVelocity = -(self.yVelocity / 2.0);
+            }
+            
+        }
+        
     }
     
 }

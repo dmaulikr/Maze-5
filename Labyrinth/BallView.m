@@ -8,13 +8,20 @@
 
 #import "BallView.h"
 
+@interface BallView()
+
+@property (nonatomic, strong) UIColor *color;
+
+@end
+
 @implementation BallView
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame withColor:(UIColor *)color
 {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
+        self.color = color;
     }
     return self;
 }
@@ -22,7 +29,7 @@
 - (void)drawRect:(CGRect)rect
 {
     UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:rect];
-    [[UIColor redColor] set];
+    [self.color set];
     [path fill];
     
      
