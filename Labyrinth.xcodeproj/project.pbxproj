@@ -23,6 +23,7 @@
 		27AC1833190C859700A89C57 /* LabyrinthTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AC1832190C859700A89C57 /* LabyrinthTests.m */; };
 		27AC183E190C85AB00A89C57 /* BallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AC183D190C85AB00A89C57 /* BallView.m */; };
 		27AC1840190C874600A89C57 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27AC183F190C874600A89C57 /* CoreMotion.framework */; };
+		27AC1843190C985A00A89C57 /* WallView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AC1842190C985A00A89C57 /* WallView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,8 @@
 		27AC183C190C85AB00A89C57 /* BallView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BallView.h; sourceTree = "<group>"; };
 		27AC183D190C85AB00A89C57 /* BallView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BallView.m; sourceTree = "<group>"; };
 		27AC183F190C874600A89C57 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		27AC1841190C985A00A89C57 /* WallView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallView.h; sourceTree = "<group>"; };
+		27AC1842190C985A00A89C57 /* WallView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +127,8 @@
 				27AC1819190C859700A89C57 /* Main.storyboard */,
 				27AC181C190C859700A89C57 /* ViewController.h */,
 				27AC181D190C859700A89C57 /* ViewController.m */,
+				27AC1841190C985A00A89C57 /* WallView.h */,
+				27AC1842190C985A00A89C57 /* WallView.m */,
 				27AC183C190C85AB00A89C57 /* BallView.h */,
 				27AC183D190C85AB00A89C57 /* BallView.m */,
 				27AC181F190C859700A89C57 /* Images.xcassets */,
@@ -260,6 +265,7 @@
 			files = (
 				27AC181E190C859700A89C57 /* ViewController.m in Sources */,
 				27AC1818190C859700A89C57 /* AppDelegate.m in Sources */,
+				27AC1843190C985A00A89C57 /* WallView.m in Sources */,
 				27AC1814190C859700A89C57 /* main.m in Sources */,
 				27AC183E190C85AB00A89C57 /* BallView.m in Sources */,
 			);
