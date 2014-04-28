@@ -38,31 +38,31 @@
 {
     [super viewDidLoad];
     self.walls = [@[] mutableCopy];    
-//    [self.walls addObjectsFromArray:self.view.subviews];
-    NSLog(@"Walls count: %i", self.walls.count);
+    [self.walls addObjectsFromArray:self.view.subviews];
     
     self.lastUpdate = [NSDate date];
-    self.currentPoint = self.view.center;
     
     // Make exit
     CGRect ballFrame = CGRectMake(0, 0, kBallSize, kBallSize);
-    ballFrame.origin = CGPointMake(self.view.bounds.size.width * 0.9, self.view.bounds.size.height * 0.9);
+    ballFrame.origin = CGPointMake(self.view.bounds.size.width * 0.9, self.view.bounds.size.height * 0.1);
     self.exit = [[BallView alloc] initWithFrame:ballFrame withColor:[UIColor blackColor]];
     [self.view addSubview:self.exit];
     
     // Create ball view
 
-    ballFrame.origin = self.currentPoint;
+    ballFrame.origin = CGPointMake(10, self.view.bounds.size.height * 0.9);
     self.ball = [[BallView alloc] initWithFrame:ballFrame withColor:[UIColor redColor]];
     [self.view addSubview:self.ball];
     
+    self.currentPoint = ballFrame.origin;
+    
     // Create wall...
 
-    CGRect wallFrame = CGRectMake(10, 10, 100, 20);
-    UIView *wallView = [[UIView alloc] initWithFrame:wallFrame];
-    wallView.backgroundColor = [UIColor blueColor];
-    [self.walls addObject:wallView];
-    [self.view addSubview:wallView];
+//    CGRect wallFrame = CGRectMake(100, 100, 100, 20);
+//    UIView *wallView = [[UIView alloc] initWithFrame:wallFrame];
+//    wallView.backgroundColor = [UIColor blueColor];
+//    [self.walls addObject:wallView];
+//    [self.view addSubview:wallView];
     
     
     // Initiate accelerometer
@@ -156,30 +156,33 @@
 }
 
 - (void)collsionWithWalls {
-    
-    CGRect frame = self.ball.frame;
-    frame.origin.x = self.currentPoint.x;
-    frame.origin.y = self.currentPoint.y;
 
-    CGPoint ballCenter = CGPointMake(frame.origin.x + (frame.size.width / 2),
-                                     frame.origin.y + (frame.size.height / 2));
     for (UIView *wall in self.walls) {
+        if (CGRectIntersectsRect(self.ball.frame, wall.frame)) {
+            CGPoint ballCenter = CGPointMake(self.ball.frame.origin.x + self.ball.frame.size.width/2,
+                                             self.ball.frame.origin.y + self.ball.frame.size.height/2);
             
-            // Compute collision angle
-
-            CGPoint wallCenter  = CGPointMake(wall.frame.origin.x + (wall.frame.size.width / 2),
-                                              wall.frame.origin.y + (wall.frame.size.height / 2));
-            
-            CGFloat angleX = ballCenter.x - wallCenter.x;
-            CGFloat angleY = ballCenter.y - wallCenter.y;
-            
-            if (abs(angleX) > abs(angleY)) {
-                _currentPoint.x = self.previousPoint.x;
-                self.xVelocity = -(self.xVelocity / 2.0);
-            } else {
-                _currentPoint.y = self.previousPoint.y;
-                self.yVelocity = -(self.yVelocity / 2.0);
+            if (self.ball.frame.origin.x <= wall.frame.origin.x) {
+                _currentPoint.x = self.previousPoint.x - 1;
+//                self.xVelocity = -(self.xVelocity / kReflectionFactor);
+                self.xVelocity = 0;
+            } else if (self.ball.frame.origin.x <= wall.frame.origin.x + wall.frame.size.width) {
+                _currentPoint.x = self.previousPoint.x + 1;
+//                self.xVelocity = -(self.xVelocity / kReflectionFactor);
+                self.xVelocity = 0;
             }
+            
+            
+            if (self.ball.frame.origin.y <= wall.frame.origin.y) {
+                _currentPoint.y = self.previousPoint.y - 1;
+//                self.yVelocity = -(self.yVelocity / kReflectionFactor);
+                self.yVelocity = 0;
+            } else if (self.ball.frame.origin.y <= wall.frame.origin.y + wall.frame.size.height) {
+                _currentPoint.y = self.previousPoint.y + 1;
+//                self.yVelocity = -(self.yVelocity / kReflectionFactor);
+                self.yVelocity = 0;
+            }
+        }
         
     }
     
