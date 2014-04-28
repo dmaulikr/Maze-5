@@ -82,11 +82,6 @@
     
     CGFloat x = data.acceleration.x;
     CGFloat y = data.acceleration.y;
-//    CGFloat z = data.acceleration.z;
-    
-//    self.xLabel.text = [NSString stringWithFormat:@"x: %.2f", x];
-//    self.yLabel.text = [NSString stringWithFormat:@"y: %.2f", y];
-//    self.zLabel.text = [NSString stringWithFormat:@"z: %.2f", z];
     
     self.xVelocity = (self.xVelocity / kFriction) - (x * timeSinceLastDraw);
     self.yVelocity = (self.yVelocity / kFriction) - (y * timeSinceLastDraw);
@@ -159,33 +154,67 @@
 
     for (UIView *wall in self.walls) {
         if (CGRectIntersectsRect(self.ball.frame, wall.frame)) {
-            CGPoint ballCenter = CGPointMake(self.ball.frame.origin.x + self.ball.frame.size.width/2,
-                                             self.ball.frame.origin.y + self.ball.frame.size.height/2);
+            CGFloat leftA = self.ball.frame.origin.x;
+            CGFloat rightA = self.ball.frame.origin.x + self.ball.frame.size.width;
+            CGFloat topA = self.ball.frame.origin.y;
+            CGFloat bottomA = self.ball.frame.origin.y + self.ball.frame.size.height;
             
-            if (self.ball.frame.origin.x <= wall.frame.origin.x) {
-                _currentPoint.x = self.previousPoint.x - 1;
-//                self.xVelocity = -(self.xVelocity / kReflectionFactor);
-                self.xVelocity = 0;
-            } else if (self.ball.frame.origin.x <= wall.frame.origin.x + wall.frame.size.width) {
-                _currentPoint.x = self.previousPoint.x + 1;
-//                self.xVelocity = -(self.xVelocity / kReflectionFactor);
-                self.xVelocity = 0;
+            CGFloat leftB = wall.frame.origin.x;
+            CGFloat rightB = wall.frame.origin.x + wall.frame.size.width;
+            CGFloat topB = wall.frame.origin.y;
+            CGFloat bottomB = wall.frame.origin.y + wall.frame.size.height;
+            
+            if (rightA >= leftB) {
+                _currentPoint.x -= 1;
+                self.xVelocity = -self.xVelocity;
+            } else if (leftA <= rightB) {
+                _currentPoint.x += 1;
+                self.xVelocity = -self.xVelocity;
             }
             
-            
-            if (self.ball.frame.origin.y <= wall.frame.origin.y) {
-                _currentPoint.y = self.previousPoint.y - 1;
-//                self.yVelocity = -(self.yVelocity / kReflectionFactor);
-                self.yVelocity = 0;
-            } else if (self.ball.frame.origin.y <= wall.frame.origin.y + wall.frame.size.height) {
-                _currentPoint.y = self.previousPoint.y + 1;
-//                self.yVelocity = -(self.yVelocity / kReflectionFactor);
-                self.yVelocity = 0;
+            if (bottomA >= topB) {
+                _currentPoint.y -= 1;
+                self.yVelocity = -self.yVelocity;
+            } else if (topA <= bottomB) {
+                _currentPoint.y += 1;
+                self.yVelocity = -self.yVelocity;
             }
         }
-        
+    
     }
     
+}
+
+- (BOOL)checkCollisionWithWall:(UIView *)wall
+{
+    CGFloat leftA = self.ball.frame.origin.x;
+    CGFloat rightA = self.ball.frame.origin.x + self.ball.frame.size.width;
+    CGFloat topA = self.ball.frame.origin.y;
+    CGFloat bottomA = self.ball.frame.origin.y + self.ball.frame.size.height;
+    
+    CGFloat leftB = wall.frame.origin.x;
+    CGFloat rightB = wall.frame.origin.x + wall.frame.size.width;
+    CGFloat topB = wall.frame.origin.y;
+    CGFloat bottomB = wall.frame.origin.y + wall.frame.size.height;
+    
+    if (bottomA <= topB ){
+        return NO;
+    }
+    
+    if( topA >= bottomB ) {
+        return NO;
+    }
+    
+    if( rightA <= leftB ) {
+        return NO;
+    }
+    
+    if( leftA >= rightB ) {
+        return NO;
+    }
+    
+    //If none of the sides from A are outside B
+    return YES;
 }
 
 @end
